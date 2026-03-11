@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Digital Wallet Transaction Log</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        .form-container {
+            background-color: #eef1f5;
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: 0 auto 30px auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .form-container label {
+            display: block;
+            margin-top: 12px;
+            font-weight: 600;
+        }
+        .form-container input,
+        .form-container select {
+            width: 100%;
+            padding: 8px 10px;
+            margin-top: 4px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .form-container button {
+            margin-top: 18px;
+            padding: 10px 25px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #1a252f;
+        }
+        .error-msg {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .table-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        thead th {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px 10px;
+            text-align: left;
+        }
+        tbody td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Wallet Transaction Form</h2>
+    <form th:action="@{/save}" th:object="${transaction}" method="post">
+        <label for="userName">User Name</label>
+        <input type="text" id="userName" th:field="*{userName}" required="required"/>
+
+        <label for="walletId">Wallet ID</label>
+        <input type="text" id="walletId" th:field="*{walletId}" required="required"/>
+
+        <label for="transactionType">Transaction Type</label>
+        <select id="transactionType" th:field="*{transactionType}">
+            <option value="Credit">Credit</option>
+            <option value="Debit">Debit</option>
+        </select>
+
+        <label for="amount">Amount</label>
+        <input type="number" id="amount" th:field="*{amount}" min="1" required="required"/>
+
+        <label for="description">Description</label>
+        <input type="text" id="description" th:field="*{description}" required="required"/>
+
+        <button type="submit">Submit</button>
+    </form>
+    <p class="error-msg" th:if="${error}" th:text="${error}"></p>
+</div>
+
+<div class="table-container">
+    <h2>Transaction Log</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>User Name</th>
+            <th>Wallet ID</th>
+            <th>Transaction Type</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Transaction Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="t : ${transactions}">
+            <td th:text="${t.id}"></td>
+            <td th:text="${t.userName}"></td>
+            <td th:text="${t.walletId}"></td>
+            <td th:text="${t.transactionType}"></td>
+            <td th:text="${t.amount}"></td>
+            <td th:text="${t.description}"></td>
+            <td th:text="${t.transactionTime}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
